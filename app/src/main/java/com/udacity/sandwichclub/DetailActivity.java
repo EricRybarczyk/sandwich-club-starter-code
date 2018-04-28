@@ -3,12 +3,16 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
+
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -43,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +60,41 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        TextView sandwichDescription = findViewById(R.id.description_tv);
+        TextView sandwichIngredients = findViewById(R.id.ingredients_tv);
+        TextView sandwichOrigin = findViewById(R.id.origin_tv);
+        TextView sandwitchAlsoKnown = findViewById(R.id.also_known_tv);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < sandwich.getIngredients().size(); i++) {
+            sb.append(sandwich.getIngredients().get(i));
+            sb.append("\n");
+        }
+
+        sandwichDescription.setText(sandwich.getDescription());
+        sandwichIngredients.setText(sb.toString());
+
+        if (sandwich.getPlaceOfOrigin().length() == 0) {
+            sandwichOrigin.setVisibility(View.GONE);
+            (findViewById(R.id.label_origin_tv)).setVisibility(View.GONE);
+        } else {
+            sandwichOrigin.setText(sandwich.getPlaceOfOrigin());
+        }
+
+
+        if (sandwich.getAlsoKnownAs().size() == 0) {
+            sandwitchAlsoKnown.setVisibility(View.GONE);
+            (findViewById(R.id.label_also_known_tv)).setVisibility(View.GONE);
+        } else {
+            sb = new StringBuilder();
+            for (int i = 0; i < sandwich.getAlsoKnownAs().size(); i++) {
+                sb.append(sandwich.getAlsoKnownAs().get(i));
+                sb.append("\n");
+            }
+            sandwitchAlsoKnown.setText(sb.toString());
+        }
 
     }
 }
