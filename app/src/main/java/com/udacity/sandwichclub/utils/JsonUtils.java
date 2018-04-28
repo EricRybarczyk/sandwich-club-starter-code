@@ -1,5 +1,7 @@
 package com.udacity.sandwichclub.utils;
 
+import android.util.Log;
+
 import com.udacity.sandwichclub.model.Sandwich;
 
 import org.json.JSONArray;
@@ -13,6 +15,8 @@ import java.util.List;
 public class JsonUtils {
 
     public static Sandwich parseSandwichJson(String json) {
+
+        final String TAG = Sandwich.class.getName();
 
         Sandwich requestedSandwich;
 
@@ -45,14 +49,12 @@ public class JsonUtils {
                 alsoKnownAs.add(alsoKnownAsList.getString(i));
             }
 
-
             requestedSandwich = new Sandwich(mainName, alsoKnownAs, placeOfOrigin, description, image, ingredients);
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to load requested sandwich from data received.");
             return null;
         }
-
 
         return requestedSandwich;
     }
